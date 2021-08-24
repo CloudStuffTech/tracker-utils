@@ -70,7 +70,7 @@ class Mailer {
 				mailgun.messages().send(mailOpts, (error, body) => {
 					if (error) {
 						this._logMessage(error);
-						reject(false);
+						resolve(false);
 					} else {
 						this._logMessage(body);
 						resolve(true);
