@@ -77,7 +77,7 @@ class Mailer {
 					}
 				});
 			} catch (error) {
-				this._logMessage(error);
+				this._logMessage(`[ERROR][MAILER] ${error}`);
 				resolve(false);
 			}
 		});
