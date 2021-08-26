@@ -10,16 +10,10 @@ class Mailer {
 	/**
 	 * @constructor
 	 * @param {object} config - mailgun config
-	 * @param {string} templateStr - ejs template string
-	 * @param {object} mailOpts - mail options { to: <String>, subject: <String> }
-	 * @param {object} templateOpts - { [string]: any }
 	 * @param {Function} [logger] - callback function to log messages
 	 */
-	constructor(config, templateStr, mailOpts, templateOpts = null, logger = null) {
+	constructor(config, logger = null) {
 		this.config = config;
-		this.templateStr = templateStr;
-		this.mailOpts = mailOpts;
-		this.templateOpts = templateOpts || {};
 		this.logger = logger;
 		if (!this.config) {
 			throw new Error("Mailgun config not found.");
@@ -39,20 +33,28 @@ class Mailer {
 	/**
 	 * [PRIVATE] This method will return the utf-8 content string of the email template with the 
 	 * parsed template variables.
+	 * 
+	 * @param {string} templateStr - ejs template string to be parsed
+	 * @param {object} templateOpts - template options to be substitutedin parsed string
+	 * 
 	 * @returns {string}
 	 * @author Arpit Jain <arpit@trackier.com>
 	 */
-	_getTemplateContent() {
-		const template = ejs.compile(this.templateStr);
-		return template(this.templateOpts);
+	_getTemplateContent(templateStr, templateOpts) {
+		const template = ejs.compile(templateStr);
+		return template(templateOpts);
 	}
 
 	/**
 	 * [PUBLIC] This method should be called to send the email to the users.
+	 * @param {string} templateStr - ejs template string
+	 * @param {object} mailOpts - mail options { to: <String>, subject: <String> }
+	 * @param {object} [templateOpts] - { [string]: any }
+	 * 
 	 * @returns {Promise<boolean>}
 	 * @author Arpit Jain <arpit@trackier.com>
 	 */
-	send() {
+	send(templateStr, mailOpts, templateOpts = {}) {
 		return new Promise((resolve, _reject) => {
 			try {
 				const mailgun = Mailgun({
@@ -60,15 +62,15 @@ class Mailer {
 					domain: this.config.domain
 				});
 
-				const emailHtmlContent = this._getTemplateContent();
-				const mailOpts = {
+				const emailHtmlContent = this._getTemplateContent(templateStr, templateOpts);
+				const mailOptions = {
 					from: `Trackier ${this.config.fromEmail}`,
-					to: this.mailOpts.to,
-					subject: this.mailOpts.subject,
+					to: mailOpts.to,
+					subject: mailOpts.subject,
 					html: emailHtmlContent
 				};
 
-				mailgun.messages().send(mailOpts, (error, body) => {
+				mailgun.messages().send(mailOptions, (error, body) => {
 					if (error) {
 						this._logMessage(error);
 						resolve(false);
