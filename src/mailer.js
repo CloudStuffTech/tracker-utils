@@ -18,6 +18,10 @@ class Mailer {
 		if (!this.config) {
 			throw new Error("Mailgun config not found.");
 		}
+		this.mailgun = Mailgun({
+			apiKey: this.config.apikey,
+			domain: this.config.domain
+		});
 	}
 
 	/**
@@ -57,11 +61,6 @@ class Mailer {
 	send(templateStr, mailOpts, templateOpts = {}) {
 		return new Promise((resolve, _reject) => {
 			try {
-				const mailgun = Mailgun({
-					apiKey: this.config.apikey,
-					domain: this.config.domain
-				});
-
 				const emailHtmlContent = this._getTemplateContent(templateStr, templateOpts);
 				const mailOptions = {
 					from: `Trackier ${this.config.fromEmail}`,
@@ -70,7 +69,7 @@ class Mailer {
 					html: emailHtmlContent
 				};
 
-				mailgun.messages().send(mailOptions, (error, body) => {
+				this.mailgun.messages().send(mailOptions, (error, body) => {
 					if (error) {
 						this._logMessage(error);
 						resolve(false);
