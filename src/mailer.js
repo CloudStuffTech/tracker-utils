@@ -21,13 +21,16 @@ class Mailer {
 		this.mailOpts = mailOpts;
 		this.templateOpts = templateOpts || {};
 		this.logger = logger;
+		if (!this.config) {
+			throw new Error("Mailgun config not found.");
+		}
 	}
 
 	/**
 	 * [PRIVATE] This method will log message using the logger function if provided
 	 * @param {*} message - message to log
 	 */
-	_logMessage(message){
+	_logMessage(message) {
 		if (this.logger) {
 			this.logger(message);
 		}
@@ -36,6 +39,7 @@ class Mailer {
 	/**
 	 * [PRIVATE] This method will return the utf-8 content string of the email template with the 
 	 * parsed template variables.
+	 * @returns {string}
 	 * @author Arpit Jain <arpit@trackier.com>
 	 */
 	_getTemplateContent() {
@@ -49,11 +53,8 @@ class Mailer {
 	 * @author Arpit Jain <arpit@trackier.com>
 	 */
 	send() {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve, _reject) => {
 			try {
-				if (!this.config) {
-					throw new Error("Mailgun config not found");
-				}
 				const mailgun = Mailgun({
 					apiKey: this.config.apikey,
 					domain: this.config.domain
