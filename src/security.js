@@ -49,6 +49,24 @@ class Security {
     }
     return ipaddr;
   }
+  encrypt(text, key = "123456789987654321") {
+    const iv = Buffer.from(crypto.randomBytes(16)).toString("hex").slice(0, 16);
+    const password_hash = crypto.createHash("md5").update(key, "utf-8").digest("hex").toUpperCase();
+    const cipher = crypto.createCipheriv("aes-256-ctr", password_hash, iv);
+    let crypted = cipher.update(text, "utf8", "hex");
+    crypted += cipher.final("hex");
+    return crypted + iv;
+  }
+
+  decrypt(text, key = "123456789987654321") {
+    const iv = text.slice(text.length - 16, text.length);
+    text = text.substring(0, text.length - 16);
+    const password_hash = crypto.createHash("md5").update(key, "utf-8").digest("hex").toUpperCase();
+    const decipher = crypto.createDecipheriv("aes-256-ctr", password_hash, iv);
+    let decrypted = decipher.update(text, "hex", "utf8");
+    decrypted += decipher.final("utf8");
+    return decrypted;
+  }
 }
 
 module.exports = new Security;
