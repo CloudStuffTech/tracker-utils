@@ -9,7 +9,8 @@ let BufferWriter = require('./src/bufferwriter'),
 	TrafficDistribution = require('./src/trafficdistribution'),
 	ArrayMethods = require('./src/arraymethods'),
 	StringMethods = require('./src/stringmethods'),
-	Mailer = require("./src/mailer");
+	Mailer = require("./src/mailer"),
+	CloudStorage = require("./src/cloudstorage");
 
 module.exports = {
 	BufferWriter: BufferWriter,
@@ -23,5 +24,6 @@ module.exports = {
 	TrafficDistribution: TrafficDistribution,
 	ArrayMethods: ArrayMethods,
 	StringMethods: StringMethods,
-	Mailer: Mailer
+	Mailer: Mailer,
+	CloudStorage
 };
