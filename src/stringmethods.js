@@ -7,7 +7,11 @@ class StringMethods {
 	static makePrimaryKey(obj, groupBy = []) {
 		let pieces = [];
 		_.each(groupBy, (g) => {
-			pieces.push(obj[g] || ' ');
+			if (_.isArray(obj[g])) {
+				pieces.push(JSON.stringify(obj[g]));
+			} else {
+				pieces.push(obj[g] || ' ');
+			}
 		});
 		return _.join(pieces, "_XX_");
 	}
