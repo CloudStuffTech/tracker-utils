@@ -1,5 +1,6 @@
 // External Deps
 const axios = require("axios");
+const packageJson = require("./../package.json")
 
 /**
  * Request class acts as a wrapper to perform GET/POST requests via axios
@@ -19,7 +20,7 @@ class Request {
 	 * @returns {Promise<any>}
 	 */
 	static async get(path, params = {}, headers = {}) {
-		const response = await axios.get(path, { params, headers: { "User-Agent": "curl/7.49.0", ...headers } });
+		const response = await axios.get(path, { params, headers: { "User-Agent": `Tracker Utils ${packageJson.version}`, ...headers } });
 		return (response) ? response.data : null;
 	}
 
@@ -34,7 +35,7 @@ class Request {
 	 * @returns {Promise<any>}
 	 */
 	static async post(path, body, headers = {}) {
-		const response = await axios.post(path, body, { headers: { "User-Agent": "curl/7.49.0", ...headers } });
+		const response = await axios.post(path, body, { headers: { "User-Agent": `Tracker Utils ${packageJson.version}`, ...headers } });
 		return (response) ? response.data : null;
 	}
 
