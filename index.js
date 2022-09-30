@@ -10,6 +10,7 @@ let BufferWriter = require('./src/bufferwriter'),
 	ArrayMethods = require('./src/arraymethods'),
 	StringMethods = require('./src/stringmethods'),
 	Mailer = require("./src/mailer"),
+	Request = require("./src/request"),
 	CloudStorage = require("./src/cloudstorage");
 
 module.exports = {
@@ -25,5 +26,6 @@ module.exports = {
 	ArrayMethods: ArrayMethods,
 	StringMethods: StringMethods,
 	Mailer: Mailer,
-	CloudStorage
+	CloudStorage,
+	Request
 };
