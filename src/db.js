@@ -183,6 +183,18 @@ class Db {
 	async cacheAllWithTime(model, query, fields, timeout) {
 		return this._cacheAll(model, query, fields, timeout);
 	}
+
+
+    /**
+     * Convert a string value of mongo object id to ObjectId
+     * @param  {String} id String value of mongo object id
+     */
+	 toObjectId = function (id) {
+        if (typeof id != "string") {
+            return id;
+        }
+        return mongoose.Types.ObjectId(id);
+    };
 }
 
 module.exports = Db;
