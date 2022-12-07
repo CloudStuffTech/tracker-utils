@@ -1,4 +1,4 @@
-const tools = () => {
+const tools = (() => {
     handleShutdown = ({ params, handleInterrupt }) => {
         // Quit from keyboard ctl + c
         process.on("SIGINT", () => handleInterrupt(params));
@@ -11,6 +11,6 @@ const tools = () => {
     return {
         handleShutdown,
     };
-};
+})();
 
 module.exports = { tools };
