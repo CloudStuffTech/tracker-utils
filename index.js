@@ -13,7 +13,9 @@ let BufferWriter = require('./src/bufferwriter'),
 	Request = require("./src/request"),
 	CloudStorage = require("./src/cloudstorage"),
     { logger } = require("./src/logger"),
-    { httpReq } = require("./src/httpReq");
+    { httpReq } = require("./src/httpReq"),
+	{ devTool } = require('./src/devTool'),
+	{ urlUtil } = require('./src/urlUtil');
 
 module.exports = {
 	BufferWriter: BufferWriter,
@@ -31,5 +33,7 @@ module.exports = {
 	CloudStorage,
 	Request,
 	logger,
-	httpReq
+	httpReq,
+	devTool,
+	urlUtil
 };
