@@ -1,7 +1,6 @@
 const winston = require("winston");
 
 const logger = (() => {
-	console.log("LOGGER INIT");
 	const LOGGER_ENABLED = true;
 	let requestId = "sys_default";
 	let userId = "sys_default";
