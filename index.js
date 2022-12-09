@@ -33,7 +33,7 @@ module.exports = {
 	CloudStorage,
 	Request,
 	Logger,
-	devTool,
-	urlUtil,
-	tools
+	DevTool: devTool,
+	UrlUtil : urlUtil,
+	Tools: tools
 };
