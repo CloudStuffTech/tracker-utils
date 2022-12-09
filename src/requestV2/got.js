@@ -7,7 +7,7 @@ const request = (() => {
             const start = Date.now();
             const data = await got.get(endpoint, options);
 
-            return { data, err: null, latency: start - Date.now() };
+            return { data, err: null, latency: Date.now() - start };
         } catch (err) {
             return { data: null, err, latency: null };
         }
