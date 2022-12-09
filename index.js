@@ -12,7 +12,7 @@ let BufferWriter = require('./src/bufferwriter'),
 	Mailer = require("./src/mailer"),
 	Request = require("./src/request"),
 	CloudStorage = require("./src/cloudstorage"),
-	{ logger } = require("./src/logger"),
+	{ Logger } = require("./src/logger"),
 	{ devTool } = require('./src/devTool'),
 	{ urlUtil } = require('./src/urlUtil'),
 	{ tools } = require('./src/tools');
@@ -32,7 +32,7 @@ module.exports = {
 	Mailer: Mailer,
 	CloudStorage,
 	Request,
-	logger,
+	Logger,
 	devTool,
 	urlUtil,
 	tools
