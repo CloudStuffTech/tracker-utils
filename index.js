@@ -11,7 +11,12 @@ let BufferWriter = require('./src/bufferwriter'),
 	StringMethods = require('./src/stringmethods'),
 	Mailer = require("./src/mailer"),
 	Request = require("./src/request"),
-	CloudStorage = require("./src/cloudstorage");
+	CloudStorage = require("./src/cloudstorage"),
+	{ Logger } = require("./src/logger"),
+	{ devTool } = require('./src/devTool'),
+	{ urlUtil } = require('./src/urlUtil'),
+	{ tools } = require('./src/tools'),
+	{ requestV2 } = require('./src/requestV2');
 
 module.exports = {
 	BufferWriter: BufferWriter,
@@ -27,5 +32,10 @@ module.exports = {
 	StringMethods: StringMethods,
 	Mailer: Mailer,
 	CloudStorage,
-	Request
+	Request,
+	Logger,
+	DevTool: devTool,
+	UrlUtil : urlUtil,
+	Tools: tools,
+	RequestV2 : requestV2
 };

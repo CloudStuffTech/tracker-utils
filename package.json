@@ -1,6 +1,6 @@
 {
   "name": "tracker-utils",
-  "version": "1.4.24",
+  "version": "1.5.0",
   "description": "Tracker Utils",
   "main": "index.js",
   "scripts": {
@@ -18,12 +18,14 @@
     "axios": "^0.27.2",
     "bluebird": "^3.5.0",
     "ejs": "^3.1.6",
+    "got": "^11.8.5",
     "is-ip": "^2.0.0",
     "lodash": "^4.17.4",
     "mailgun-js": "^0.22.0",
     "memcached": "^2.2.2",
     "mongoose": "^5.13.9",
     "redis": "3.1.1",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "winston": "^3.8.2"
   }
 }
