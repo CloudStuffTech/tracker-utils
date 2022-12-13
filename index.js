@@ -16,7 +16,7 @@ let BufferWriter = require('./src/bufferwriter'),
 	{ devTool } = require('./src/devTool'),
 	{ urlUtil } = require('./src/urlUtil'),
 	{ tools } = require('./src/tools'),
-    { requestV2 } = require('./src/requestV2');
+	{ requestV2 } = require('./src/requestV2');
 
 module.exports = {
 	BufferWriter: BufferWriter,
