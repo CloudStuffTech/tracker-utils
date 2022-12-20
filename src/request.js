@@ -20,7 +20,7 @@ class Request {
 	 * @returns {Promise<any>}
 	 */
 	static async get(path, params = {}, headers = {}) {
-		const response = await axios.get(path, { params, headers: { "User-Agent": `Tracker Utils ${packageJson.version}`, ...headers } });
+		const response = await axios.get(path, { params, headers: { "User-Agent": `Tracker Utils v1`, ...headers } });
 		return (response) ? response.data : null;
 	}
 
