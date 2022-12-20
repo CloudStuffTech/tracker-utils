@@ -183,6 +183,18 @@ class Db {
 	async cacheAllWithTime(model, query, fields, timeout) {
 		return this._cacheAll(model, query, fields, timeout);
 	}
+
+	/**
+	 * Call this function to close the connection to the database
+	 * @return {Bool}
+	 */
+	close() {
+		if (this.conn) {
+			this.conn.close();
+			return true;
+		}
+		return false;
+	}
 }
 
 module.exports = Db;
