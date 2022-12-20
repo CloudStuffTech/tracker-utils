@@ -1,6 +1,5 @@
 // External Deps
 const axios = require("axios");
-const packageJson = require("./../package.json");
 const { tools } = require("./tools");
 
 /**
