@@ -9,6 +9,8 @@ const urlUtil = (() => {
 			const regEx = new RegExp("{" + key + "}", "g");
 			url = url.replace(regEx, value);
 		});
+		// replace null macros(Macros for whic no data is available) with empty string.
+		url = url.replace(new RegExp("\{.*?\}", "g"), "");
 		return url;
 	};
 
