@@ -1,6 +1,5 @@
 // External Deps
 const axios = require("axios");
-const packageJson = require("./../package.json");
 const { tools } = require("./tools");
 
 /**
@@ -21,7 +20,7 @@ class Request {
 	 * @returns {Promise<any>}
 	 */
 	static async get(path, params = {}, headers = {}) {
-		const response = await axios.get(path, { params, headers: { "User-Agent": `Tracker Utils ${packageJson.version}`, ...headers } });
+		const response = await axios.get(path, { params, headers: { "User-Agent": `Tracker Utils v1`, ...headers } });
 		return (response) ? response.data : null;
 	}
 
@@ -63,7 +62,7 @@ class Request {
 	 * @returns {Promise<any>}
 	 */
 	static async post(path, body, headers = {}) {
-		const response = await axios.post(path, body, { headers: { "User-Agent": `Tracker Utils ${packageJson.version}`, ...headers } });
+		const response = await axios.post(path, body, { headers: { "User-Agent": `Tracker Utils v1`, ...headers } });
 		return (response) ? response.data : null;
 	}
 
