@@ -62,7 +62,7 @@ class Request {
 	 * @returns {Promise<any>}
 	 */
 	static async post(path, body, headers = {}) {
-		const response = await axios.post(path, body, { headers: { "User-Agent": `Tracker Utils ${packageJson.version}`, ...headers } });
+		const response = await axios.post(path, body, { headers: { "User-Agent": `Tracker Utils v1`, ...headers } });
 		return (response) ? response.data : null;
 	}
 
