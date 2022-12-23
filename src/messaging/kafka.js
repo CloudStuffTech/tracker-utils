@@ -1,8 +1,9 @@
 const { Kafka } = require("kafkajs");
 const os = require("os");
 
-const kafka = (() => {
+const kafka = () => {
 	let kafkaClient = null;
+	let producer = null;
 
 	const init = (config) => {
 		// Initializing Kafka Client
@@ -14,33 +15,40 @@ const kafka = (() => {
 		}
 	}
 
-	const createProducer = (config) => {
+	const createProducer = ({
+		createPartitioner = null,
+		retry = null,
+		metadataMaxAge = 300000, //5 minutes
+		allowAutoTopicCreation = false,
+		transactionTimeout = 30000,
+		idempotent = false,
+		maxInFlightRequests = null
+	}) => {
 		if (kafkaClient === null) return null;
-		
-		const {
-			createPartitioner = null,
-			retry = null,
-			metadataMaxAge = 300000, //5 minutes
-			allowAutoTopicCreation = false,
-			transactionTimeout = 30000,
-			idempotent = false,
-			maxInFlightRequests = null
-		} = config;
 
-		const producer = kafkaClient.producer({
-			createPartitioner,
-			retry,
-			metadataMaxAge, //5 minutes
-			allowAutoTopicCreation,
-			transactionTimeout,
-			idempotent,
-			maxInFlightRequests
-		})
+		if (producer === null) {
+			producer = kafkaClient.producer({
+				createPartitioner,
+				retry,
+				metadataMaxAge, //5 minutes
+				allowAutoTopicCreation,
+				transactionTimeout,
+				idempotent,
+				maxInFlightRequests
+			})
+		}
 
-		return producer
 	}
 
-	return { init, createProducer }
-})()
+	const connectProducer = async () => {
+		if (producer) await producer.connect()
+	}
+
+	const disconnectProducer = async () => {
+		if (producer) await producer.disconnect()
+	}
+
+	return { init, createProducer, connectProducer, disconnectProducer }
+}
 
 module.exports = { kafka }
