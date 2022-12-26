@@ -1,6 +1,7 @@
 const { Kafka } = require("kafkajs");
 const os = require("os");
 
+// Todo:- option to reuse existing client
 const kafka = () => {
 	let kafkaClient = null;
 	let producer = null;
@@ -16,15 +17,15 @@ const kafka = () => {
 	}
 
 	const createProducer = ({
-		createPartitioner = null,
-		retry = null,
+		createPartitioner = undefined,
+		retry = undefined,
 		metadataMaxAge = 300000, //5 minutes
 		allowAutoTopicCreation = false,
 		transactionTimeout = 30000,
 		idempotent = false,
-		maxInFlightRequests = null
-	}) => {
-		if (kafkaClient === null) return null;
+		maxInFlightRequests = undefined
+	} = {}) => {
+		if (kafkaClient === null) return false;
 
 		if (producer === null) {
 			producer = kafkaClient.producer({
@@ -41,14 +42,27 @@ const kafka = () => {
 	}
 
 	const connectProducer = async () => {
-		if (producer) await producer.connect()
+		if (!producer) {
+			return false;
+		}
+		await producer.connect();
 	}
 
 	const disconnectProducer = async () => {
-		if (producer) await producer.disconnect()
+		if (!producer) {
+			return false
+		}
+		await producer.disconnect()
 	}
 
-	return { init, createProducer, connectProducer, disconnectProducer }
+	const send = async ({ messages, topic }) => {
+		if (!producer) {
+			return false;
+		}
+		await producer.send({ topic, messages, });
+	}
+
+	return { init, createProducer, connectProducer, disconnectProducer, send }
 }
 
 module.exports = { kafka }
