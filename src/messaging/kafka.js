@@ -56,7 +56,7 @@ const kafka = () => {
 		await producer.disconnect()
 	}
 
-	const send = async ({ messages, topic }) => {
+	const send = async ({ topic, messages }) => {
 		if (!producer) {
 			return false;
 		}
