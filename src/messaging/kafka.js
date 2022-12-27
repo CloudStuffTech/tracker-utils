@@ -1,7 +1,6 @@
 const { Kafka } = require("kafkajs");
 const os = require("os");
 
-// Todo:- option to reuse existing client
 const kafka = () => {
 	let kafkaClient = null;
 	let producer = null;
