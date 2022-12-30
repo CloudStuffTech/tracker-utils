@@ -33,22 +33,24 @@ class Request {
 	 */
 	static async getV2({ path, params = {}, headers = {}, retryDelay = 200, retry = 3 }) {
 		const start = Date.now();
+		let response = null;
 		let data = null;
 		let err = null;
 
 		for (let i = 0; i < retry; i++) {
 			try {
-				data = await this.get(path, params, headers)
+				response = await axios.get(path, { params, headers: { "User-Agent": `Tracker Utils v1`, ...headers } });
+				if (response) data = response.data;
 				// If got reponse in 2nd or later retry reset the error to null.
 				err = null;
 				break;
 			} catch (error) {
 				err = error;
 			}
-			await tools.sleep(i + 1 * retryDelay)
+			await tools.sleep(i + 1 * retryDelay);
 		}
 
-		return { data, err, latency: Date.now() - start };
+		return { data, response, err, latency: Date.now() - start };
 	}
 
 	/**
