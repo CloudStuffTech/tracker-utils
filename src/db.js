@@ -86,6 +86,34 @@ class Db {
 		return "CC:" + Security.md5(key);
 	}
 
+	getCacheKeyWithOpts(model, query, fields, opts) {
+		let dupQuery = {};
+		_.each(query, (v, k) => {
+			if (typeof v == "object" && v instanceof RegExp) {
+				dupQuery[k] = v.toString();
+			} else {
+				dupQuery[k] = v;
+			}
+		})
+		let qstr = JSON.stringify(dupQuery);
+		let key = `${model}:${qstr}`;
+		if (fields) {
+			key += ":" + fields;
+		}
+		if (opts) {
+			let dupOpts = {};
+			_.each(opts, (v,k) => {
+				if (typeof v == "object" && v instanceof RegExp) {
+					dupOpts[k] = v.toString();
+				} else {
+					dupOpts[k] = v;
+				}
+			})
+			key += ":" + JSON.stringify(dupOpts);
+		}
+		return "CC:" + Security.md5(key);
+	}
+
 	/**
 	 * Query the database model with the provided query
 	 * @param  {String} m     Model Name
@@ -146,6 +174,15 @@ class Db {
 			opts = {}
 		}
 		let query = this.conn.model(m).find(q, fields);
+		if (opts.skip) {
+			query.skip(opts.skip)
+		}
+		if (opts.sort) {
+			query.sort(opts.sort)
+		}
+		if (opts.limit) {
+			query.limit(opts.limit)
+		}
 		if (opts.maxTimeMS) {
 			query.maxTimeMS(opts.maxTimeMS)
 		}
@@ -168,6 +205,16 @@ class Db {
 		return cacheObj;
 	}
 
+	async _cacheAllWithOpts(m, q, f, o) {
+		let cacheKey = this.getCacheKeyWithOpts(m, q, f, o) + "_all";	// add suffix so as to distinguise between cache first and cacheall key if rest of parameters are the same
+		let cacheObj = await this.cache.get(cacheKey);
+		if (cacheObj === undefined) {
+			cacheObj = await this.findAll(m, q, f, o);
+			await this.cache.set(cacheKey, cacheObj, 10000);
+		}
+		return cacheObj;
+	}
+
 	/**
 	 * Public wrapper for the private method
 	 */
@@ -182,6 +229,10 @@ class Db {
 	 */
 	async cacheAllWithTime(model, query, fields, timeout) {
 		return this._cacheAll(model, query, fields, timeout);
+	}
+
+	async cacheAllWithOpts(model, query, fields, opts) {
+		return this._cacheAllWithOpts(model, query, fields, opts);
 	}
 
 	/**
