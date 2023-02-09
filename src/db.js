@@ -70,18 +70,23 @@ class Db {
 	 * @return {String}        Unique Cache Key
 	 */
 	getCacheKey(model, query, fields) {
-		let dupQuery = {};
-		_.each(query, (v, k) => {
-			if (typeof v == "object" && v instanceof RegExp) {
-				dupQuery[k] = v.toString();
-			} else {
-				dupQuery[k] = v;
-			}
-		})
-		let qstr = JSON.stringify(dupQuery);
+		let qstr = convertQueryToStr(query);
 		let key = `${model}:${qstr}`;
 		if (fields) {
 			key += ":" + fields;
+		}
+		return "CC:" + Security.md5(key);
+	}
+
+	getCacheKeyWithOpts(model, query, fields, opts) {
+		let qstr = convertQueryToStr(query);
+		let key = `${model}:${qstr}`;
+		if (fields) {
+			key += ":" + fields;
+		}
+		if (opts) {
+			let optsQstr = convertQueryToStr(opts);
+			key += ":" + optsQstr;
 		}
 		return "CC:" + Security.md5(key);
 	}
@@ -145,10 +150,14 @@ class Db {
 		if (! opts) {
 			opts = {}
 		}
+		
 		let query = this.conn.model(m).find(q, fields);
-		if (opts.maxTimeMS) {
-			query.maxTimeMS(opts.maxTimeMS)
-		}
+		_.each(['skip', 'sort', 'limit', 'maxTimeMS'], (o) => {
+			let val = opts[o] || null;
+			if (val) {
+				query[o](val);
+			}
+		});
 		return query.lean().exec();
 	}
 
@@ -164,6 +173,16 @@ class Db {
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f);
 			await this.cache.set(cacheKey, cacheObj, t);
+		}
+		return cacheObj;
+	}
+
+	async _cacheAllWithOpts(m, q, f, o) {
+		let cacheKey = this.getCacheKeyWithOpts(m, q, f, o) + "_all";	// add suffix so as to distinguise between cache first and cacheall key if rest of parameters are the same
+		let cacheObj = await this.cache.get(cacheKey);
+		if (cacheObj === undefined) {
+			cacheObj = await this.findAll(m, q, f, o);
+			await this.cache.set(cacheKey, cacheObj, o.timeout || 10000);
 		}
 		return cacheObj;
 	}
@@ -184,6 +203,10 @@ class Db {
 		return this._cacheAll(model, query, fields, timeout);
 	}
 
+	async cacheAllWithOpts(model, query, fields, opts) {
+		return this._cacheAllWithOpts(model, query, fields, opts);
+	}
+
 	/**
 	 * Call this function to close the connection to the database
 	 * @return {Bool}
@@ -195,6 +218,18 @@ class Db {
 		}
 		return false;
 	}
+}
+
+function convertQueryToStr(query) {
+	let dupQuery = {};
+	_.each(query, (v, k) => {
+		if (typeof v == "object" && v instanceof RegExp) {
+			dupQuery[k] = v.toString();
+		} else {
+			dupQuery[k] = v;
+		}
+	});
+	return JSON.stringify(dupQuery);
 }
 
 module.exports = Db;
