@@ -70,15 +70,7 @@ class Db {
 	 * @return {String}        Unique Cache Key
 	 */
 	getCacheKey(model, query, fields) {
-		let dupQuery = {};
-		_.each(query, (v, k) => {
-			if (typeof v == "object" && v instanceof RegExp) {
-				dupQuery[k] = v.toString();
-			} else {
-				dupQuery[k] = v;
-			}
-		})
-		let qstr = JSON.stringify(dupQuery);
+		let qstr = convertQueryToQueryString(query);
 		let key = `${model}:${qstr}`;
 		if (fields) {
 			key += ":" + fields;
@@ -87,29 +79,14 @@ class Db {
 	}
 
 	getCacheKeyWithOpts(model, query, fields, opts) {
-		let dupQuery = {};
-		_.each(query, (v, k) => {
-			if (typeof v == "object" && v instanceof RegExp) {
-				dupQuery[k] = v.toString();
-			} else {
-				dupQuery[k] = v;
-			}
-		})
-		let qstr = JSON.stringify(dupQuery);
+		let qstr = convertQueryToQueryString(query);
 		let key = `${model}:${qstr}`;
 		if (fields) {
 			key += ":" + fields;
 		}
 		if (opts) {
-			let dupOpts = {};
-			_.each(opts, (v,k) => {
-				if (typeof v == "object" && v instanceof RegExp) {
-					dupOpts[k] = v.toString();
-				} else {
-					dupOpts[k] = v;
-				}
-			})
-			key += ":" + JSON.stringify(dupOpts);
+			let optsQstr = convertQueryToQueryString(opts);
+			key += ":" + optsQstr;
 		}
 		return "CC:" + Security.md5(key);
 	}
@@ -173,19 +150,14 @@ class Db {
 		if (! opts) {
 			opts = {}
 		}
+		
 		let query = this.conn.model(m).find(q, fields);
-		if (opts.skip) {
-			query.skip(opts.skip)
-		}
-		if (opts.sort) {
-			query.sort(opts.sort)
-		}
-		if (opts.limit) {
-			query.limit(opts.limit)
-		}
-		if (opts.maxTimeMS) {
-			query.maxTimeMS(opts.maxTimeMS)
-		}
+		_.each(['skip', 'sort', 'limit', 'maxTimeMS'], (o) => {
+			let val = opts[o] || null;
+			if (val) {
+				query[o](...val);
+			}
+		});
 		return query.lean().exec();
 	}
 
@@ -210,7 +182,7 @@ class Db {
 		let cacheObj = await this.cache.get(cacheKey);
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f, o);
-			await this.cache.set(cacheKey, cacheObj, 10000);
+			await this.cache.set(cacheKey, cacheObj, o.timeout || 10000);
 		}
 		return cacheObj;
 	}
@@ -246,6 +218,18 @@ class Db {
 		}
 		return false;
 	}
+}
+
+function convertQueryToQueryString(query) {
+	const dupQuery = {};
+	_.each(query, (v, k) => {
+		if (typeof v == "object" && v instanceof RegExp) {
+			dupQuery[k] = v.toString();
+		} else {
+			dupQuery[k] = v;
+		}
+	});
+	return JSON.stringify(dupQuery);
 }
 
 module.exports = Db;
