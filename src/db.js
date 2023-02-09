@@ -70,7 +70,7 @@ class Db {
 	 * @return {String}        Unique Cache Key
 	 */
 	getCacheKey(model, query, fields) {
-		let qstr = convertQueryToQueryString(query);
+		let qstr = convertQueryToStr(query);
 		let key = `${model}:${qstr}`;
 		if (fields) {
 			key += ":" + fields;
@@ -79,13 +79,13 @@ class Db {
 	}
 
 	getCacheKeyWithOpts(model, query, fields, opts) {
-		let qstr = convertQueryToQueryString(query);
+		let qstr = convertQueryToStr(query);
 		let key = `${model}:${qstr}`;
 		if (fields) {
 			key += ":" + fields;
 		}
 		if (opts) {
-			let optsQstr = convertQueryToQueryString(opts);
+			let optsQstr = convertQueryToStr(opts);
 			key += ":" + optsQstr;
 		}
 		return "CC:" + Security.md5(key);
@@ -220,7 +220,7 @@ class Db {
 	}
 }
 
-function convertQueryToQueryString(query) {
+function convertQueryToStr(query) {
 	const dupQuery = {};
 	_.each(query, (v, k) => {
 		if (typeof v == "object" && v instanceof RegExp) {
