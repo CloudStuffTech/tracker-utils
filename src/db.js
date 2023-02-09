@@ -221,7 +221,7 @@ class Db {
 }
 
 function convertQueryToStr(query) {
-	const dupQuery = {};
+	let dupQuery = {};
 	_.each(query, (v, k) => {
 		if (typeof v == "object" && v instanceof RegExp) {
 			dupQuery[k] = v.toString();
