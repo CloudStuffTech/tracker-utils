@@ -155,7 +155,7 @@ class Db {
 		_.each(['skip', 'sort', 'limit', 'maxTimeMS'], (o) => {
 			let val = opts[o] || null;
 			if (val) {
-				query[o](...val);
+				query[o](val);
 			}
 		});
 		return query.lean().exec();

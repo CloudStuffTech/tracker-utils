@@ -31,7 +31,7 @@ class ArrayMethods {
 		return arr;
 	}
 
-	static _mapObject(items, field) {
+	static mapObject(items, field) {
 		let result = {};
 		_.each(items, (i) => {
 			result[i[field]] = i;
@@ -39,7 +39,7 @@ class ArrayMethods {
 		return result;
 	}
 
-	static _arrayKeys(objs, field) {
+	static arrayKeys(objs, field) {
 		let result = [];
 		_.each(objs, (o) => {
 			result.push(o[field]);
@@ -47,7 +47,7 @@ class ArrayMethods {
 		return _.uniq(result);
 	}
 
-	static _mergeInObjArray(objs, field) {
+	static mergeInObjArray(objs, field) {
 		let result = [];
 		_.each(objs, (obj) => {
 			result = _.union(result, obj[field] || []);
@@ -55,7 +55,7 @@ class ArrayMethods {
 		return result;
 	}
 
-	static _mapObjectArrays(objs, field) {
+	static mapObjectArrays(objs, field) {
 		let result = {};
 		_.each(objs, (obj) => {
 			result[obj[field]] = _.union(result[obj[field]] || [], [obj]);
