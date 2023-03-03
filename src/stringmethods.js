@@ -27,6 +27,11 @@ class StringMethods {
 		return this.sprintf("'%s'", this.addslashes(val));
 	}
 
+	static escapeSqlStrArr(arr) {
+		arr = _.map(arr, _.toString);
+		arr = _.map(arr, (v) => StringMethods.escapeSqlStr)
+		return arr;
+	}
 }
 
 module.exports = StringMethods;
