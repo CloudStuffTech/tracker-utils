@@ -29,8 +29,8 @@ class StringMethods {
 
 	static escapeSqlStrArr(arr) {
 		arr = _.map(arr, _.toString);
-		arr = _.map(arr, (v) => StringMethods.escapeSqlStr)
-		return arr;
+		arr = _.map(arr, (v) => StringMethods.escapeSqlStr(v))
+		return _.join(arr, ',');
 	}
 }
 
