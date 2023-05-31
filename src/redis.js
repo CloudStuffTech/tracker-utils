@@ -21,7 +21,7 @@ class Redis {
       clientOpts.auth_pass = conf.password;
     }
     this.client = redis.createClient(clientOpts);
-
+    this.timeout = conf.timeout || 1000;
     this.client.on('error', (err) => {
       console.log('Error: Redis.CLIENT - ' + err, conf.host);
     })
@@ -88,8 +88,8 @@ class Redis {
         resolve(replies)
       })
       setTimeout(() => {
-        reject(new Error('Redis timed out after 1000 ms'));
-      }, 1000)
+        reject(new Error(`Redis timed out after ${this.timeout} ms`));
+      }, this.timeout)
     })
   }
 
@@ -173,8 +173,8 @@ class Redis {
       })
 
       setTimeout(() => {
-        reject(new Error('Redis timed out after 1000 ms'));
-      }, 1000)
+        reject(new Error(`Redis timed out after ${this.timeout} ms`));
+      }, this.timeout)
     })
   }
 }
