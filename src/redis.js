@@ -161,7 +161,7 @@ class Redis {
   async _execute(...args) {
     let client = this.client,
       method = args[0];
-
+    const timeout = this.timeout || 1000;
     args.splice(0, 1);
 
     return new Promise((resolve, reject) => {
@@ -173,8 +173,8 @@ class Redis {
       })
 
       setTimeout(() => {
-        reject(new Error(`Redis timed out after ${this.timeout} ms`));
-      }, this.timeout)
+        reject(new Error(`Redis timed out after ${timeout} ms`));
+      }, timeout)
     })
   }
 }
