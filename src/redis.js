@@ -21,7 +21,7 @@ class Redis {
       clientOpts.auth_pass = conf.password;
     }
     this.client = redis.createClient(clientOpts);
-
+    this.timeout = conf.timeout || 1000;
     this.client.on('error', (err) => {
       console.log('Error: Redis.CLIENT - ' + err, conf.host);
     })
@@ -75,6 +75,7 @@ class Redis {
 
   async multiExecute(operations) {
     let multi = this.getMulti();
+    const timeout = this.timeout || 1000;
     _.each(operations, (args) => {
       let op = args[0];
       args.splice(0, 1);
@@ -88,8 +89,8 @@ class Redis {
         resolve(replies)
       })
       setTimeout(() => {
-        reject(new Error('Redis timed out after 1000 ms'));
-      }, 1000)
+        reject(new Error(`Redis timed out after ${timeout} ms`));
+      }, timeout)
     })
   }
 
@@ -161,7 +162,7 @@ class Redis {
   async _execute(...args) {
     let client = this.client,
       method = args[0];
-
+    const timeout = this.timeout || 1000;
     args.splice(0, 1);
 
     return new Promise((resolve, reject) => {
@@ -173,8 +174,8 @@ class Redis {
       })
 
       setTimeout(() => {
-        reject(new Error('Redis timed out after 1000 ms'));
-      }, 1000)
+        reject(new Error(`Redis timed out after ${timeout} ms`));
+      }, timeout)
     })
   }
 }
