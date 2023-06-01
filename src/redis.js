@@ -75,6 +75,7 @@ class Redis {
 
   async multiExecute(operations) {
     let multi = this.getMulti();
+    const timeout = this.timeout || 1000;
     _.each(operations, (args) => {
       let op = args[0];
       args.splice(0, 1);
@@ -88,8 +89,8 @@ class Redis {
         resolve(replies)
       })
       setTimeout(() => {
-        reject(new Error(`Redis timed out after ${this.timeout} ms`));
-      }, this.timeout)
+        reject(new Error(`Redis timed out after ${timeout} ms`));
+      }, timeout)
     })
   }
 
