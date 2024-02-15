@@ -16,7 +16,7 @@ class Security {
    * @return {String} URL friendly ID
    */
   id() {
-    return shortid.generate();
+	return shortid.generate();
   }
 
   /**
@@ -25,7 +25,7 @@ class Security {
    * @return {String}
    */
   md5(str) {
-    return crypto.createHash('md5').update(str).digest("hex");
+	return crypto.createHash('md5').update(str).digest("hex");
   }
 
   /**
@@ -34,42 +34,50 @@ class Security {
    * @return {String}        Modified IP
    */
   maskIp(ipaddr) {
-    if (isIp(ipaddr)) {
-      if (isIp.v4(ipaddr)) {
-        let parts = ipaddr.split(".");
-        parts[parts.length - 1] = "0";
+	if (isIp(ipaddr)) {
+	  if (isIp.v4(ipaddr)) {
+		let parts = ipaddr.split(".");
+		parts[parts.length - 1] = "0";
 
-        ipaddr = parts.join('.');
-      } else if (isIp.v6(ipaddr)) {
-        let parts = ipaddr.split(":");
-        parts[parts.length - 1] = "0000";
+		ipaddr = parts.join('.');
+	  } else if (isIp.v6(ipaddr)) {
+		let parts = ipaddr.split(":");
+		parts[parts.length - 1] = "0000";
 
-        ipaddr = parts.join(':');
-      }
-    }
-    return ipaddr;
+		ipaddr = parts.join(':');
+	  }
+	}
+	return ipaddr;
   }
 
   encrypt (text, key) {
-    const passwordHash = crypto.createHash('sha256').update(key).digest("hex").substr(0, 32);
-    const iv = Buffer.from(crypto.randomBytes(16)).toString("hex").slice(0, 16);
-    const cipher = crypto.createCipheriv("AES-256-CBC", passwordHash, iv);
-    const cipherText = cipher.update(text, "utf8", "base64") + cipher.final("base64");
-    const encodedIv = Buffer.from(iv).toString('base64');
-    const hmac = crypto.createHmac("sha256",cipherText);
-    const hashHmac = hmac.update(Buffer.from(passwordHash, 'utf-8')).digest();
-    const encodedHmac = Buffer.from(hashHmac).toString('base64').substr(0,44);
-    return encodedIv+encodedHmac+cipherText;
+	const passwordHash = crypto.createHash('sha256').update(key).digest("hex").substr(0, 32);
+	const iv = Buffer.from(crypto.randomBytes(16)).toString("hex").slice(0, 16);
+	const cipher = crypto.createCipheriv("AES-256-CBC", passwordHash, iv);
+	const cipherText = cipher.update(text, "utf8", "base64") + cipher.final("base64");
+	const encodedIv = Buffer.from(iv).toString('base64');
+	const hmac = crypto.createHmac("sha256",cipherText);
+	const hashHmac = hmac.update(Buffer.from(passwordHash, 'utf-8')).digest();
+	const encodedHmac = Buffer.from(hashHmac).toString('base64').substr(0,44);
+	return encodedIv+encodedHmac+cipherText;
   }
 
   decrypt (text, key) {
-    const passwordHash = crypto.createHash('sha256').update(key).digest("hex").substr(0, 32);
-    const decodedIv = text.substring(24,0);
-    const iv = Buffer.from(decodedIv,'base64'); 
-    const decipherText = text.slice(68);
-    const decipher = crypto.createDecipheriv("AES-256-CBC", passwordHash, iv);
-    const originalText = decipher.update(decipherText, "base64", "utf8") + decipher.final("utf8");
-    return originalText;
+	const passwordHash = crypto.createHash('sha256').update(key).digest("hex").substr(0, 32);
+	const decodedIv = text.substring(24,0);
+	const iv = Buffer.from(decodedIv,'base64'); 
+	const decipherText = text.slice(68);
+	const decipher = crypto.createDecipheriv("AES-256-CBC", passwordHash, iv);
+	const originalText = decipher.update(decipherText, "base64", "utf8") + decipher.final("utf8");
+	return originalText;
+  }
+
+  base64decode(text) {
+	try {
+		return Buffer.from(text, 'base64').toString('ascii');
+	} catch (e) {
+		return "";
+	}
   }
 }
 
