@@ -179,7 +179,7 @@ class Redis {
     })
   }
  
-  /**
+	/**
 	 * Call this function to close the connection to the redis
 	 * @return {Bool}
 	 */
