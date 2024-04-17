@@ -22,15 +22,15 @@ class Cache {
    * @return {this}      Object of this class
    */
   constructor(opts) {    
-    if (typeof opts === "object") {
-      this.prefix = opts.prefix || DEFAULT_PREFIX;
-      this.timeout = opts.timeout || DEFAULT_TIMEOUT;
-      this._memcached = new Memcached(opts.server || DEFAULT_SERVER);
-    } else {    // initialize with defaults
-      this.prefix = DEFAULT_PREFIX;
-      this.timeout = DEFAULT_TIMEOUT;
-      this._memcached = new Memcached(DEFAULT_SERVER);
-    }
+	if (typeof opts === "object") {
+		this.prefix = opts.prefix || DEFAULT_PREFIX;
+		this.timeout = opts.timeout || DEFAULT_TIMEOUT;
+		this._memcached = new Memcached(opts.server || DEFAULT_SERVER);
+	} else {    // initialize with defaults
+		this.prefix = DEFAULT_PREFIX;
+		this.timeout = DEFAULT_TIMEOUT;
+		this._memcached = new Memcached(DEFAULT_SERVER);
+	}
   }
 
   /**
@@ -39,15 +39,15 @@ class Cache {
    * @param  {String} name Name of the key
    * @return {String}      Modified cache key
    */
-  getKey(name) {
-    return this.prefix + ":" + name;
-  }
+	getKey(name) {
+		return this.prefix + ":" + name;
+	}
 
   /**
    * Alias of this.set
    */
   async put(name, value, timeout) {
-    return this.set(name, value, timeout);
+	return this.set(name, value, timeout);
   }
 
   /**
@@ -57,15 +57,15 @@ class Cache {
    * @param {Number} timeout Cache time for the object (optional if not provided then default one will be used)
    */
   async set(name, value, timeout) {
-    let self = this;
-    return new Promise(resolve => {
-      self._memcached.set(self.getKey(name), value, timeout || self.timeout, function (err) {
-        if (err) {
-          return resolve(false);
-        }
-        resolve(true);
-      })
-    })
+	let self = this;
+	return new Promise(resolve => {
+	  self._memcached.set(self.getKey(name), value, timeout || self.timeout, function (err) {
+		if (err) {
+		  return resolve(false);
+		}
+		resolve(true);
+	  })
+	})
   }
 
   /**
@@ -74,25 +74,37 @@ class Cache {
    * @return {Mixed}      Undefined on not found
    */
   async get(name) {
-    let self = this;
-    return new Promise(resolve => {
-      self._memcached.get(self.getKey(name), function (err, data) {
-        resolve(data);
-      })
-    })
+	let self = this;
+	return new Promise(resolve => {
+	  self._memcached.get(self.getKey(name), function (err, data) {
+		resolve(data);
+	  })
+	})
   }
 
   async delete(name) {
-    let self = this;
-    return new Promise(resolve => {
-      self._memcached.del(self.getKey(name), function (err) {
-        if (err) {
-          return resolve(false);
-        }
-        resolve(true);
-      })
-    })
+	let self = this;
+	return new Promise(resolve => {
+	  self._memcached.del(self.getKey(name), function (err) {
+		if (err) {
+		  return resolve(false);
+		}
+		resolve(true);
+	  })
+	})
   }
+
+  	/**
+	 * Call this function to close the connection to the memcache
+	 * @return {Bool}
+	 */
+	close() {
+		if (this._memcached) {
+			this._memcached.end();
+			return true;
+		}
+		return false;
+	}
 }
 
 module.exports = Cache;
