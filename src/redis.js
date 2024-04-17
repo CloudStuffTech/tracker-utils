@@ -178,6 +178,18 @@ class Redis {
       }, timeout)
     })
   }
+ 
+  /**
+	 * Call this function to close the connection to the redis
+	 * @return {Bool}
+	 */
+	close() {
+		if (this.client) {
+			this.client.quit();
+			return true;
+		}
+		return false;
+	}
 }
 
 module.exports = Redis;

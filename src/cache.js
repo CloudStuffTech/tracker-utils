@@ -93,6 +93,18 @@ class Cache {
       })
     })
   }
+
+  /**
+	 * Call this function to close the connection to the memcache
+	 * @return {Bool}
+	 */
+	close() {
+		if (this._memcached) {
+			this._memcached.end();
+			return true;
+		}
+		return false;
+	}
 }
 
 module.exports = Cache;
