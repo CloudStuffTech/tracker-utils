@@ -15,7 +15,7 @@ let BufferWriter = require('./src/bufferwriter'),
 	{ Logger } = require("./src/logger"),
 	{ devTool } = require('./src/devTool'),
 	{ urlUtil } = require('./src/urlUtil'),
-	{ tools } = require('./src/tools'),
+	{ handleShutdown, sleep } = require('./src/tools'),
 	{ requestV2 } = require('./src/requestV2');
 
 module.exports = {
@@ -36,6 +36,6 @@ module.exports = {
 	Logger,
 	DevTool: devTool,
 	UrlUtil : urlUtil,
-	Tools: tools,
+	Tools: { handleShutdown, sleep },
 	RequestV2 : requestV2
 };
