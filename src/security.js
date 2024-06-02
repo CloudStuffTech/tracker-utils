@@ -79,6 +79,14 @@ class Security {
 		return "";
 	}
   }
+
+  base64encode(text) {
+	try {
+		return Buffer.from(text).toString('base64');
+	} catch (e) {
+		return "";
+	}
+  }
 }
 
 module.exports = new Security;
