@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/CloudStuffTech/tracker-utils.git"
   },
-  "author": "Hemant Mann <hemant.mann@vnative.com>",
+  "author": "Hemant Mann <hemant.mann@trackier.com>",
   "homepage": "https://github.com/CloudStuffTech/tracker-utils#readme",
   "dependencies": {
     "@google-cloud/pubsub": "^1.1.3",

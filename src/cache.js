@@ -10,7 +10,7 @@ let DEFAULT_SERVER = '127.0.0.1:11211';
  * @package Cloudstuff Tracker Utils
  * @module Cache
  * @version 1.0
- * @author Hemant Mann <hemant.mann@vnative.com>
+ * @author Hemant Mann <hemant.mann@trackier.com>
  */
 class Cache {
 	/**

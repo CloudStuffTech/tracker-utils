@@ -6,7 +6,7 @@ const isIp = require('is-ip');
  * @package Cloudstuff Tracker Utils
  * @module Security
  * @version 1.0
- * @author Hemant Mann <hemant.mann@vnative.com>
+ * @author Hemant Mann <hemant.mann@trackier.com>
  */
 class Security {
   constructor() {}

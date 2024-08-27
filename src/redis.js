@@ -7,7 +7,7 @@ let Promise = require('bluebird');
  * @package Cloudstuff Tracker Utils
  * @module Redis
  * @since 1.0.1
- * @author Hemant Mann <hemant.mann@vnative.com>
+ * @author Hemant Mann <hemant.mann@trackier.com>
  */
 class Redis {
   /**

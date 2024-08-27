@@ -6,7 +6,7 @@ let _ = require('lodash');
  * @package Cloudstuff Tracker Utils
  * @module Traffic Distribution
  * @since 1.0.3
- * @author Hemant Mann <hemant.mann@vnative.com>
+ * @author Hemant Mann <hemant.mann@trackier.com>
  */
 class TrafficDistribution {
 	/**

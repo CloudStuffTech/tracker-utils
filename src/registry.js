@@ -6,7 +6,7 @@
  * @package Cloudstuff Tracker Utils
  * @module Registry
  * @version 1.0
- * @author Hemant Mann <hemant.mann@vnative.com>
+ * @author Hemant Mann <hemant.mann@trackier.com>
  */
 class Registry {
   constructor() {
