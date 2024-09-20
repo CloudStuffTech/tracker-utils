@@ -1,5 +1,5 @@
 let crypto = require('crypto');
-let shortid = require('shortid');
+let shortid = require('nanoid');
 const isIp = require('is-ip');
 
 /**
@@ -16,7 +16,7 @@ class Security {
    * @return {String} URL friendly ID
    */
   id() {
-	return shortid.generate();
+	return shortid(12);
   }
 
   /**

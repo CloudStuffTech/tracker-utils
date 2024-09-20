@@ -1,8 +1,12 @@
-const Mailgun = require("mailgun-js");
+const Mailgun = require('mailgun.js');
+const formData = require('form-data');
+
+const mailgun = new Mailgun(formData);
 const ejs = require("ejs");
 
 /**
  * This class is used to send email to the users.
+ * @author Hemant Mann <hemant.mann@trackier.com>
  * @author Arpit Jain <arpit@trackier.com>
  */
 class Mailer {
@@ -18,10 +22,8 @@ class Mailer {
 		if (!this.config) {
 			throw new Error("Mailgun config not found.");
 		}
-		this.mailgun = Mailgun({
-			apiKey: this.config.apikey,
-			domain: this.config.domain
-		});
+		const mg = mailgun.client({ username: 'api', key: this.config.apikey });
+		this.mailgun = mg;
 	}
 
 	/**
@@ -56,34 +58,25 @@ class Mailer {
 	 * @param {object} [templateOpts] - { [string]: any }
 	 * 
 	 * @returns {Promise<boolean>}
-	 * @author Arpit Jain <arpit@trackier.com>
+	 * @author Hemant Mann <hemant.mann@trackier.com>
 	 */
-	send(templateStr, mailOpts, templateOpts = {}) {
-		return new Promise((resolve, _reject) => {
-			try {
-				const emailHtmlContent = this._getTemplateContent(templateStr, templateOpts);
-				const mailOptions = {
-					from: `Trackier ${this.config.fromEmail}`,
-					to: mailOpts.to,
-					subject: mailOpts.subject,
-					html: emailHtmlContent
-				};
+	async send(templateStr, mailOpts, templateOpts = {}) {
+		try {
+			const emailHtmlContent = this._getTemplateContent(templateStr, templateOpts);
+			const mailOptions = {
+				from: `Trackier ${this.config.fromEmail}`,
+				to: mailOpts.to,
+				subject: mailOpts.subject,
+				html: emailHtmlContent
+			};
 
-				this.mailgun.messages().send(mailOptions, (error, body) => {
-					if (error) {
-						this._logMessage(error);
-						resolve(false);
-					} else {
-						this._logMessage(body);
-						resolve(true);
-					}
-				});
-			} catch (error) {
-				this._logMessage(`[ERROR][MAILER] ${error}`);
-				resolve(false);
-			}
-		});
-
+			this._logMessage(body);
+			await this.mailgun.messages.create(this.config.domain, mailOptions);
+			return true;
+		} catch (error) {
+			this._logMessage(`[ERROR][MAILER] ${error}`);
+			return false;
+		}
 	}
 }
 
