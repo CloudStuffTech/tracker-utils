@@ -12,6 +12,9 @@
   },
   "author": "Hemant Mann <hemant.mann@trackier.com>",
   "homepage": "https://github.com/CloudStuffTech/tracker-utils#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@google-cloud/pubsub": "^4.7.2",
     "@google-cloud/storage": "^5.16.1",
