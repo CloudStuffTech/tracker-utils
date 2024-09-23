@@ -1,5 +1,5 @@
 let crypto = require('crypto');
-let shortid = require('nanoid');
+let { ulid: shortid } = require('ulidx');
 const isIp = require('is-ip');
 
 /**
@@ -12,11 +12,11 @@ class Security {
   constructor() {}
 
   /**
-   * Generate a unique random id of length 7-14 characters
+   * Generate a unique random id of length 26 characters
    * @return {String} URL friendly ID
    */
   id() {
-	return shortid(12);
+	return shortid();
   }
 
   /**
