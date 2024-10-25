@@ -89,7 +89,7 @@ class Cache {
 	}
 
 	/**
-	 * Get the value from Cache
+	 * Get the value from Cache with error capture on sentry
 	 * @param  {String} name Name of the key
 	 * @return {Mixed}      Undefined on not found
 	 */
