@@ -68,10 +68,7 @@ class Cache {
 				}
 				resolve(true);
 			})
-
-			setTimeout(() => {
-				reject(new Error(`Memcache timed out after ${self.opTimeout} ms`));
-			}, self.opTimeout)
+			resolve(false);
 		})
 	}
 
@@ -85,10 +82,9 @@ class Cache {
 		return new Promise((resolve, reject) => {
 			self._memcached.get(self.getKey(name), function (err, data) {
 				resolve(data);
-			})
-			setTimeout(() => {
-				reject(new Error(`Memcache timed out after ${self.opTimeout} ms`));
-			}, self.opTimeout)
+			});
+			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
+			resolve(undefined);
 		})
 	}
 
@@ -100,10 +96,9 @@ class Cache {
 					return resolve(false);
 				}
 				resolve(true);
-			})
-			setTimeout(() => {
-				reject(new Error(`Memcache timed out after ${self.opTimeout} ms`));
-			}, self.opTimeout)
+			});
+			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
+			resolve(undefined);
 		})
 	}
 
