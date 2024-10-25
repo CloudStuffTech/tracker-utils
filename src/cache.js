@@ -81,10 +81,10 @@ class Cache {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			self._memcached.get(self.getKey(name), function (err, data) {
-				resolve(data);
+				resolve({data: data, error: null});
 			});
 			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
-			resolve(undefined);
+			resolve(resolve({data: undefined, error: error}));
 		})
 	}
 

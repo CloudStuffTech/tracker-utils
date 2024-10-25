@@ -113,7 +113,7 @@ class Db {
 	 */
 	async _cacheFirst(m, q, opts) {
 		let cacheKey = this.getCacheKey(m, q);
-		let cacheObj = await this.cache.get(cacheKey);
+		let {cacheObj, error} = await this.cache.get(cacheKey);
 		if (cacheObj === undefined) {
 			cacheObj = await this.first(m, q, opts);
 			await this.cache.set(cacheKey, cacheObj, opts && opts.timeout ? opts.timeout : 0)
@@ -168,8 +168,8 @@ class Db {
 	 * @param  {Number} t     Time in seconds for the which the object is to be cached if found
 	 */
 	async _cacheAll(m, q, f, t) {
-		let cacheKey = this.getCacheKey(m, q, f) + "_all";	// add suffix so as to distinguise between cache first and cacheall key if rest of parameters are the same
-		let cacheObj = await this.cache.get(cacheKey);
+		let cacheKey = this.getCacheKey(m, q, f) + "_all";	// add suffix so as to distinguish between cache first and cache-all key if rest of parameters are the same
+		let {cacheObj, error} = await this.cache.get(cacheKey);
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f);
 			await this.cache.set(cacheKey, cacheObj, t);
@@ -178,8 +178,8 @@ class Db {
 	}
 
 	async _cacheAllWithOpts(m, q, f, o) {
-		let cacheKey = this.getCacheKeyWithOpts(m, q, f, o) + "_all";	// add suffix so as to distinguise between cache first and cacheall key if rest of parameters are the same
-		let cacheObj = await this.cache.get(cacheKey);
+		let cacheKey = this.getCacheKeyWithOpts(m, q, f, o) + "_all";	// add suffix so as to distinguish between cache first and cache-all key if rest of parameters are the same
+		let {cacheObj, error} = await this.cache.get(cacheKey);
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f, o);
 			await this.cache.set(cacheKey, cacheObj, o.timeout || 10000);
