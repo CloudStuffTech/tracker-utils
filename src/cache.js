@@ -81,10 +81,26 @@ class Cache {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			self._memcached.get(self.getKey(name), function (err, data) {
+				resolve(data);
+			});
+			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
+			resolve(undefined);
+		})
+	}
+
+	/**
+	 * Get the value from Cache
+	 * @param  {String} name Name of the key
+	 * @return {Mixed}      Undefined on not found
+	 */
+	async getv2(name) {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			self._memcached.get(self.getKey(name), function (err, data) {
 				resolve({data: data, error: null});
 			});
 			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
-			resolve(resolve({data: undefined, error: error}));
+			resolve({data: undefined, error: error});
 		})
 	}
 
