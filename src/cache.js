@@ -1,4 +1,7 @@
 let Memcached = require('memcached');
+// Memcached.config.poolSize = 50;
+// Memcached.config.retries = 5;
+// Memcached.config.timeout = 2000;
 let Promise = require('bluebird');
 
 let DEFAULT_PREFIX = "Cache_JS_";
@@ -68,9 +71,8 @@ class Cache {
 				}
 				resolve(true);
 			})
-
 			setTimeout(() => {
-				reject(new Error(`Memcache timed out after ${self.opTimeout} ms`));
+				resolve(false);
 			}, self.opTimeout)
 		})
 	}
@@ -85,9 +87,27 @@ class Cache {
 		return new Promise((resolve, reject) => {
 			self._memcached.get(self.getKey(name), function (err, data) {
 				resolve(data);
-			})
+			});
 			setTimeout(() => {
-				reject(new Error(`Memcache timed out after ${self.opTimeout} ms`));
+				resolve(undefined);
+			}, self.opTimeout)
+		})
+	}
+
+	/**
+	 * Get the value from Cache with error capture on sentry
+	 * @param  {String} name Name of the key
+	 * @return {Mixed}      Undefined on not found
+	 */
+	async getv2(name) {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			self._memcached.get(self.getKey(name), function (err, data) {
+				resolve({data: data, error: null});
+			});
+			setTimeout(() => {
+				const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
+				resolve({data: undefined, error: error});
 			}, self.opTimeout)
 		})
 	}
@@ -100,9 +120,9 @@ class Cache {
 					return resolve(false);
 				}
 				resolve(true);
-			})
+			});
 			setTimeout(() => {
-				reject(new Error(`Memcache timed out after ${self.opTimeout} ms`));
+				resolve(false);
 			}, self.opTimeout)
 		})
 	}
