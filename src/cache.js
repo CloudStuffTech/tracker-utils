@@ -1,4 +1,7 @@
 let Memcached = require('memcached');
+// Memcached.config.poolSize = 50;
+// Memcached.config.retries = 5;
+// Memcached.config.timeout = 2000;
 let Promise = require('bluebird');
 
 let DEFAULT_PREFIX = "Cache_JS_";
@@ -83,7 +86,6 @@ class Cache {
 			self._memcached.get(self.getKey(name), function (err, data) {
 				resolve(data);
 			});
-			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
 			resolve(undefined);
 		})
 	}

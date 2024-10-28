@@ -116,10 +116,10 @@ class Db {
 		let cacheKey = this.getCacheKey(m, q);
 		let {cacheObj, error} = await this.cache.getv2(cacheKey);
 		if (error) {
-			Sentry.withScope(function (scope) {
-				scope.setTag("memcache key", JSON.stringify({m, q}));
-				Sentry.captureException(error);
-			});
+			// Sentry.withScope(function (scope) {
+			// 	scope.setTag("memcache key", JSON.stringify({m, q}));
+			// 	Sentry.captureException(error);
+			// });
 		}
 		if (cacheObj === undefined) {
 			cacheObj = await this.first(m, q, opts);
@@ -178,10 +178,10 @@ class Db {
 		let cacheKey = this.getCacheKey(m, q, f) + "_all";	// add suffix so as to distinguish between cache first and cache-all key if rest of parameters are the same
 		let {cacheObj, error} = await this.cache.getv2(cacheKey);
 		if (error) {
-			Sentry.withScope(function (scope) {
-				scope.setTag("memcache key", JSON.stringify({m, q, f}));
-				Sentry.captureException(error);
-			});
+			// Sentry.withScope(function (scope) {
+			// 	scope.setTag("memcache key", JSON.stringify({m, q, f}));
+			// 	Sentry.captureException(error);
+			// });
 		}
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f);
@@ -194,10 +194,10 @@ class Db {
 		let cacheKey = this.getCacheKeyWithOpts(m, q, f, o) + "_all";	// add suffix so as to distinguish between cache first and cache-all key if rest of parameters are the same
 		let {cacheObj, error} = await this.cache.getv2(cacheKey);
 		if (error) {
-			Sentry.withScope(function (scope) {
-				scope.setTag("memcache key", JSON.stringify({m, q, f, o}));
-				Sentry.captureException(error);
-			});
+			// Sentry.withScope(function (scope) {
+			// 	scope.setTag("memcache key", JSON.stringify({m, q, f, o}));
+			// 	Sentry.captureException(error);
+			// });
 		}
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f, o);
