@@ -105,8 +105,10 @@ class Cache {
 			self._memcached.get(self.getKey(name), function (err, data) {
 				resolve({data: data, error: null});
 			});
-			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
-			resolve({data: undefined, error: error});
+			setTimeout(() => {
+				const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
+				resolve({data: undefined, error: error});
+			}, self.opTimeout)
 		})
 	}
 
