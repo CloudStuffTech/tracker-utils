@@ -71,7 +71,9 @@ class Cache {
 				}
 				resolve(true);
 			})
-			resolve(false);
+			setTimeout(() => {
+				resolve(false);
+			}, self.opTimeout)
 		})
 	}
 
@@ -86,7 +88,9 @@ class Cache {
 			self._memcached.get(self.getKey(name), function (err, data) {
 				resolve(data);
 			});
-			resolve(undefined);
+			setTimeout(() => {
+				resolve(undefined);
+			}, self.opTimeout)
 		})
 	}
 
@@ -115,8 +119,9 @@ class Cache {
 				}
 				resolve(true);
 			});
-			const error = `Memcache timed out after ${self.opTimeout} ms key: ${name}`;
-			resolve(undefined);
+			setTimeout(() => {
+				resolve(false);
+			}, self.opTimeout)
 		})
 	}
 
