@@ -1,10 +1,10 @@
 const handleShutdown = ({ params, handleInterrupt }) => {
 	// Quit from keyboard ctl + c
-	process.on("SIGINT", () => handleInterrupt("SIGINT", params));
+	process.once("SIGINT", () => handleInterrupt("SIGINT", params));
 	// Quit from keyboard
-	process.on("SIGQUIT", () => handleInterrupt("SIGQUIT", params));
+	process.once("SIGQUIT", () => handleInterrupt("SIGQUIT", params));
 	// quit by operating system kill command
-	process.on("SIGTERM", () => handleInterrupt("SIGTERM", params));
+	process.once("SIGTERM", () => handleInterrupt("SIGTERM", params));
 };
 
 /**
