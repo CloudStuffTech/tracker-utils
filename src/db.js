@@ -1,7 +1,6 @@
 let _ = require('lodash');
 let Cache = require('./cache');
 let Security = require('./security');
-const Sentry = require('@sentry/node');
 
 /**
  * @package Cloudstuff Tracker Utils
@@ -115,12 +114,6 @@ class Db {
 	async _cacheFirst(m, q, opts) {
 		let cacheKey = this.getCacheKey(m, q);
 		let {cacheObj, error} = await this.cache.getv2(cacheKey);
-		if (error) {
-			// Sentry.withScope(function (scope) {
-			// 	scope.setTag("memcache key", JSON.stringify({m, q}));
-			// 	Sentry.captureException(error);
-			// });
-		}
 		if (cacheObj === undefined) {
 			cacheObj = await this.first(m, q, opts);
 			await this.cache.set(cacheKey, cacheObj, opts && opts.timeout ? opts.timeout : 0)
@@ -177,12 +170,6 @@ class Db {
 	async _cacheAll(m, q, f, t) {
 		let cacheKey = this.getCacheKey(m, q, f) + "_all";	// add suffix so as to distinguish between cache first and cache-all key if rest of parameters are the same
 		let {cacheObj, error} = await this.cache.getv2(cacheKey);
-		if (error) {
-			// Sentry.withScope(function (scope) {
-			// 	scope.setTag("memcache key", JSON.stringify({m, q, f}));
-			// 	Sentry.captureException(error);
-			// });
-		}
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f);
 			await this.cache.set(cacheKey, cacheObj, t);
@@ -193,12 +180,6 @@ class Db {
 	async _cacheAllWithOpts(m, q, f, o) {
 		let cacheKey = this.getCacheKeyWithOpts(m, q, f, o) + "_all";	// add suffix so as to distinguish between cache first and cache-all key if rest of parameters are the same
 		let {cacheObj, error} = await this.cache.getv2(cacheKey);
-		if (error) {
-			// Sentry.withScope(function (scope) {
-			// 	scope.setTag("memcache key", JSON.stringify({m, q, f, o}));
-			// 	Sentry.captureException(error);
-			// });
-		}
 		if (cacheObj === undefined) {
 			cacheObj = await this.findAll(m, q, f, o);
 			await this.cache.set(cacheKey, cacheObj, o.timeout || 10000);
