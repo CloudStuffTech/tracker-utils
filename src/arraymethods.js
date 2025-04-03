@@ -47,6 +47,20 @@ class ArrayMethods {
 		return _.uniq(result);
 	}
 
+	static arrayKeysFromJSON(objs, field) {
+		try {
+			let result = [];
+			_.each(objs, (o) => {
+				const jsonObj = o.toObject()
+				if (jsonObj[field]) {
+					result.push(jsonObj[field]);
+				}
+			});
+			return _.uniq(result);
+		} catch (error) { }
+		return [];
+	}
+
 	static mergeInObjArray(objs, field) {
 		let result = [];
 		_.each(objs, (obj) => {
