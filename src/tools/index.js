@@ -1,10 +1,17 @@
 const handleShutdown = ({ params, handleInterrupt }) => {
-	// Quit from keyboard ctl + c
+	// Quit from keyboard Ctrl + C
 	process.once("SIGINT", () => handleInterrupt("SIGINT", params));
 	// Quit from keyboard
 	process.once("SIGQUIT", () => handleInterrupt("SIGQUIT", params));
-	// quit by operating system kill command
+	// Quit by operating system kill command
 	process.once("SIGTERM", () => handleInterrupt("SIGTERM", params));
+	// User-defined signal 2
+	process.once("SIGUSR2", () => handleInterrupt("SIGUSR2", params));
+	/**
+	 *  User-defined signal 1
+	 *  Note: SIGUSR1 is often used by Node.js internally (e.g., for restarting the debugger), so be cautious when using it in production.
+	 */
+	process.once("SIGUSR1", () => handleInterrupt("SIGUSR1", params));
 };
 
 /**
