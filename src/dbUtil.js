@@ -17,7 +17,9 @@ class DbUtil {
 
 	createConnection(config) {
 		let str = this.connectionStr(config);
-		return mongoose.createConnection(str, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true, poolSize: config.poolSize || 5 });
+		return mongoose.createConnection(str, {
+			maxPoolSize: config.poolSize || config.maxPoolSize || 5,
+		});
 	}
 
 	generateMongoId() {
