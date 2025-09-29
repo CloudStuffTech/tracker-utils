@@ -45,6 +45,14 @@ class Redis {
     return this._execute('hgetall', key);
   }
 
+  async hmset(key, toSetFields) {
+    return this._execute('hmset', key, toSetFields);
+  }
+
+  async hmget(key, toGetFields) {
+    return this._execute('hmget', key, toGetFields);
+  }
+
   async get(key) {
     return this._execute('get', key);
   }
