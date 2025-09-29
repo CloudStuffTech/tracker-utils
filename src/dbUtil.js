@@ -10,20 +10,28 @@ class DbUtil {
 	 * @return {String}
 	 */
 	connectionStr(config) {
-		// Check if this should use mongodb+srv:// protocol
-		if (config.useSrv || config.host.includes('.mongodb.net')) {
-			// MongoDB Atlas uses mongodb+srv:// protocol
-			if (_.size(config.user) == 0) {
-				return util.format('mongodb+srv://%s/%s?%s', config.host, config.database, config.options);
+		let str;
+		
+		if (config.url) {
+			str = config.url;
+		} else {
+			if (config.host.includes('.mongodb.net')) {
+				if (_.size(config.user) == 0) {
+					str = util.format('mongodb+srv://%s/%s?%s', config.host, config.database, config.options);
+				} else {
+					str = util.format('mongodb+srv://%s:%s@%s/%s?%s', config.user, config.password, config.host, config.database, config.options);
+				}
+			} else {
+				// Traditional MongoDB connection
+				if (_.size(config.user) == 0) {
+					str = util.format('mongodb://%s/%s?%s', config.host, config.database, config.options);
+				} else {
+					str = util.format('mongodb://%s:%s@%s/%s?%s', config.user, config.password, config.host, config.database, config.options);
+				}
 			}
-			return util.format('mongodb+srv://%s:%s@%s/%s?%s', config.user, config.password, config.host, config.database, config.options);
 		}
 		
-		// Traditional MongoDB connection
-		if (_.size(config.user) == 0) {
-			return util.format('mongodb://%s/%s?%s', config.host, config.database, config.options);
-		}
-		return util.format('mongodb://%s:%s@%s/%s?%s', config.user, config.password, config.host, config.database, config.options);
+		return str;
 	}
 	
 	createConnection(config) {
