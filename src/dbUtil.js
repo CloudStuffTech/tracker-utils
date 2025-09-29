@@ -3,7 +3,6 @@ let mongoose = require('mongoose');
 let _ = require('lodash');
 
 class DbUtil {
-
 	/**
 	 * Connection String method makes a mongodb connection string based on the config object
 	 * @param  {Object} config {host: String, user: String, password: String, options: string, database: String}
