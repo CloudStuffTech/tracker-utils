@@ -33,7 +33,7 @@ class DbUtil {
 		
 		return str;
 	}
-	
+
 	createConnection(config) {
 		let str = this.connectionStr(config);
 		return mongoose.createConnection(str, {
