@@ -33,13 +33,11 @@ class DbUtil {
 		return str;
 	}
 
-	async createConnection(config) {
+	createConnection(config) {
 		let str = this.connectionStr(config);
-		return await mongoose
-					.set('strictQuery', false) // needed in mongoose 6 for backward compatibility with mongoose 4 and 5.
-											   // strictQuery is default to false from mongoose 7 onwards
-					.createConnection(str, {maxPoolSize: config.poolSize || config.maxPoolSize || 5})
-					.asPromise();
+		return mongoose.createConnection(str, {
+			maxPoolSize: config.poolSize || config.maxPoolSize || 5,
+		});
 	}
 
 	generateMongoId() {
