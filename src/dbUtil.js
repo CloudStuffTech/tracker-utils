@@ -35,9 +35,11 @@ class DbUtil {
 
 	createConnection(config) {
 		let str = this.connectionStr(config);
-		return mongoose.createConnection(str, {
-			maxPoolSize: config.poolSize || config.maxPoolSize || 5,
-		});
+		return mongoose
+						.set('strictQuery', false)
+						.createConnection(str, {
+							maxPoolSize: config.poolSize || config.maxPoolSize || 5,
+						});
 	}
 
 	generateMongoId() {
