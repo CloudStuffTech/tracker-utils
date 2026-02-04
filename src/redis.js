@@ -22,6 +22,7 @@ class Redis {
     }
     this.client = redis.createClient(clientOpts);
     this.timeout = conf.timeout || 1000;
+    this.defaultTTL = conf.ttl || 60;
     this.client.on('error', (err) => {
       console.log('Error: Redis.CLIENT - ' + err, conf.host);
     })
@@ -160,6 +161,16 @@ class Redis {
    */
   async ttl(key) {
     return this._execute('ttl', key);
+  }
+
+  /**
+   * SETNX with TTL (Distributed Lock Helper)
+   * @param {String} key
+   * @param {String} value
+   * @param {Number} ttl (optional) TTL in seconds
+   */
+  async setnx(key, value, ttl = this.defaultTTL) {
+    return this._execute('set', key, value, 'EX', ttl, 'NX');
   }
 
   /**
