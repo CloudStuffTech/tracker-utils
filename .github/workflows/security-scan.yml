@@ -1,0 +1,26 @@
+name: "Security Scan"
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  analyze:
+    name: Analyze Code
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'javascript' # Change to your language (python, go, etc.)
+
+      - name: Perform Analysis
+        uses: github/codeql-action/analyze@v3
