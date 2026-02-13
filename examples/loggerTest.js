@@ -16,6 +16,7 @@ Logger.info("Email user@mail.company.co.uk");
 Logger.info('{"email":"abc@gmail.com"}');
 Logger.info("ADMIN@COMPANY.COM");
 Logger.info("Email test@gmail");
+Logger.info("tom@gmail.com");
 
 // PHONE VARIATIONS
 Logger.info("Call 9876543210");
@@ -25,6 +26,7 @@ Logger.info("Call 98765-43210");
 Logger.info("Phones 9876543210 and 9123456789");
 Logger.info("US number +14155552671");
 Logger.info("Call (+91) 9876543210");
+Logger.info("Call +256 1234567899")
 
 // MIXED STRING TEST
 Logger.info("User abc@gmail.com called 9876543210");
