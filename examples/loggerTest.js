@@ -1,3 +1,4 @@
+// Manual logger masking demo script (not used in production)
 let { Logger } = require('../index');
 
 Logger.init({

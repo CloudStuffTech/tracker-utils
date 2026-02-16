@@ -1,3 +1,7 @@
+// Enable/Disable masking via env (default: enabled)
+const ENABLE_MASKING = process.env.MASK_LOGS !== "false";
+
+// Regex patterns for detecting emails and phone numbers
 const REGEX_PATTERNS = [
     {
         regex: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
@@ -9,8 +13,10 @@ const REGEX_PATTERNS = [
     }
 ];
 
+// Generic mask used for structured fields like address
 const MASK = "********";
 
+// Masks phone number and exposes last 4 digits
 const maskPhone = (phone) => {
     const digits = phone.replace(/\D/g, "");
 
@@ -20,6 +26,7 @@ const maskPhone = (phone) => {
     return "*".repeat(Math.max(digits.length - 4, 0)) + last4;
 };
 
+// Masks email while partially exposing user and domain
 const maskEmail = (email) => {
     const [user, domain] = email.split("@");
     if (!domain) return "***";
@@ -49,6 +56,7 @@ const maskEmail = (email) => {
     return `${maskedUser}@${maskedDomain}.${maskedTld}`;
 };
 
+// Masks name by showing first and last two characters
 const maskName = (name) => {
     if (!name || typeof name !== "string") return name;
 
@@ -66,6 +74,7 @@ const maskName = (name) => {
         .join(" ");
 };
 
+// Applies regex-based masking on free-form strings
 const applyRegexMasking = (str) => {
     let masked = str;
 
@@ -76,6 +85,7 @@ const applyRegexMasking = (str) => {
     return masked;
 };
 
+// Recursively masks structured objects (name, region, nested fields)
 const maskObject = (obj) => {
     if (!obj || typeof obj !== "object") return obj;
 
@@ -113,7 +123,12 @@ const maskObject = (obj) => {
     return cloned;
 };
 
+// Entry point for masking (handles string or object)
 const maskData = (data) => {
+
+    // Skip masking if disabled
+    if (!ENABLE_MASKING) return data;
+
     if (!data) return data;
 
     if (typeof data === "string") {
