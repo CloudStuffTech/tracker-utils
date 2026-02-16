@@ -53,7 +53,7 @@ describe("PII Masking Tests", () => {
   });
 
   // Should not change phone <=3 digits (regex won’t match)
-  test("should fully mask phone <=3 digits", () => {
+  test("should not mask phone <=3 digits", () => {
     const input = "123";
     const output = maskData(input);
     expect(output).toBe("123");

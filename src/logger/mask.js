@@ -67,7 +67,7 @@ const maskName = (name) => {
 
             return (
                 part[0] +
-                "*".repeat(part.length - 2) +
+                "*".repeat(part.length - 3) +
                 part.slice(-2)
             );
         })
@@ -86,8 +86,10 @@ const applyRegexMasking = (str) => {
 };
 
 // Recursively masks structured objects (name, region, nested fields)
-const maskObject = (obj) => {
+const maskObject = (obj, seen = new WeakSet()) => {
     if (!obj || typeof obj !== "object") return obj;
+    if (seen.has(obj)) return "[Circular]";
+    seen.add(obj);
 
     const cloned = Array.isArray(obj) ? [...obj] : { ...obj };
 
@@ -99,7 +101,7 @@ const maskObject = (obj) => {
             return;
         }
 
-        if (key === "region" && typeof value === "object") {
+        if (key === "region" && value!==null && typeof value === "object") {
             cloned[key] = {
                 ...value,
                 address: value.address ? MASK : value.address,
@@ -116,7 +118,7 @@ const maskObject = (obj) => {
         }
 
         if (typeof value === "object") {
-            cloned[key] = maskObject(value);
+            cloned[key] = maskObject(value, seen);
         }
     });
 
