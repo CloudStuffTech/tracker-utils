@@ -56,7 +56,7 @@ const maskEmail = (email) => {
     return `${maskedUser}@${maskedDomain}.${maskedTld}`;
 };
 
-// Masks name by showing first and last two characters
+// Masks name by showing the first and last two characters 
 const maskName = (name) => {
     if (!name || typeof name !== "string") return name;
 
