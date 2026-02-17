@@ -102,8 +102,9 @@ const maskObject = (obj, seen = new WeakSet()) => {
         }
 
         if (key === "region" && value!==null && typeof value === "object") {
+			const maskedRegion = maskObject(value, seen);
             cloned[key] = {
-                ...value,
+                ...maskedRegion,
                 address: value.address ? MASK : value.address,
                 city: value.city ? MASK : value.city,
                 state: value.state ? MASK : value.state,
