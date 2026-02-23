@@ -112,5 +112,5 @@ Pull requests are welcome. Please use the [pull request template](.github/PULL_R
 
 ## License
 
-See [LICENSE](LICENSE)
+See [LICENSE](LICENSE).
 
