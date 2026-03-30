@@ -16,6 +16,9 @@ const REGEX_PATTERNS = [
 // Generic mask used for structured fields like address
 const MASK = "********";
 
+// Keys that contain IDs — not PII, skip regex masking to avoid false positives
+const SKIP_MASK_KEYS = new Set(['_id', 'id', 'org_id', 'user_id', 'campaign_id', 'publisher_id']);
+
 // Masks phone number and exposes last 4 digits
 const maskPhone = (phone) => {
     const digits = phone.replace(/\D/g, "");
@@ -94,6 +97,8 @@ const maskObject = (obj, seen = new WeakSet()) => {
     const cloned = Array.isArray(obj) ? [...obj] : { ...obj };
 
     Object.keys(cloned).forEach(key => {
+        if (SKIP_MASK_KEYS.has(key)) return;
+
         const value = cloned[key];
 
         if (key === "name" || key ==="user" && typeof value === "string") {
