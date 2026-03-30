@@ -96,7 +96,7 @@ const maskObject = (obj, seen = new WeakSet()) => {
     Object.keys(cloned).forEach(key => {
         const value = cloned[key];
 
-        if (key === "name" && typeof value === "string") {
+        if (key === "name" || key ==="user" && typeof value === "string") {
             cloned[key] = maskName(value);
             return;
         }
