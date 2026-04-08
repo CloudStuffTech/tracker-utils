@@ -43,7 +43,7 @@ class DbUtil {
 	}
 
 	generateMongoId() {
-		return mongoose.Types.ObjectId();
+		return new mongoose.Types.ObjectId();
 	}
 
 	convertToMongoId(id) {
