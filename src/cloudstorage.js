@@ -4,8 +4,8 @@ const gcpUploadRetryOpt = {
     autoRetry: true,
     maxRetries: 5,
     retryDelayMultiplier: 2,
-    totalTimeout: 300, // seconds
-    maxRetryDelay: 60 // seconds
+    totalTimeout: 120000, // 120 seconds
+    maxRetryDelay: 30000 // 30 seconds
 };
 
 /**
