@@ -1,5 +1,12 @@
 // External and built-in deps
 const { Storage } = require('@google-cloud/storage');
+const gcpUploadRetryOpt = {
+    autoRetry: true,
+    maxRetries: 5,
+    retryDelayMultiplier: 2,
+    totalTimeout: 120000, // 120 seconds
+    maxRetryDelay: 30000 // 30 seconds
+};
 
 /**
  * Note: Environment should have GOOGLE_APPLICATION_CREDENTIALS set up. This has the path of service 
@@ -21,7 +28,7 @@ class CloudStorage {
         this.type = type;
         this.baseUrl = baseUrl;
         // TODO: Update this in future when aws will be used.
-        this.storage = new Storage();
+        this.storage = new Storage({retryOptions: gcpUploadRetryOpt});
     }
 
     /**
