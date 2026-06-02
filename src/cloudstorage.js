@@ -58,7 +58,21 @@ class CloudStorage {
      */
     async uploadFile(localFilePath, destFileName, options = {}) {
         // TODO: Update this in future when aws will be used.
-        await this.storage.bucket(this.bucketName).upload(localFilePath, { destination: destFileName, ...options });
+        let lastErr;
+        for (let i = 0; i < 3; i++) {
+            try {
+                await this.storage.bucket(this.bucketName).upload(localFilePath, { destination: destFileName, ...options });
+                return;
+            } catch (e) {
+                lastErr = e;
+                if (e.code === 'ECONNRESET' || e.message?.includes('socket hang up') || e.message?.includes('TLS')) {
+                    await new Promise(resolve => { setTimeout(() => resolve(true), 2000 * (i + 1)); });
+                    continue;
+                }
+                throw e;
+            }
+        }
+        throw lastErr;
     }
 
     /**
