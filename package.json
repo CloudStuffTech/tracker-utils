@@ -4,7 +4,7 @@
   "description": "Tracker Utils",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -32,5 +32,8 @@
     "redis": "3.1.1",
     "ulidx": "^2.4.1",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
   }
 }

@@ -1,4 +1,5 @@
 const winston = require("winston");
+const { maskData } = require("./mask");
 
 const logger = (() => {
     let LOGGER_ENABLED = true;
@@ -37,7 +38,13 @@ const logger = (() => {
     };
 
     const getLogstring = (info) => {
-        return `[REQ_ID: ${requestId}][USER: ${user}][USER_ID: ${userId}][LEVEL:${info.level}][MSG:${info.message}]`;
+    const safeMessage = maskData(info.message);
+    const printableMessage =
+        typeof safeMessage === "object"
+            ? JSON.stringify(safeMessage)
+            : safeMessage;
+
+    return `[REQ_ID: ${requestId}][USER: ${user}][USER_ID: ${userId}][LEVEL:${info.level}][MSG:${printableMessage}]`;
     };
 
     const info = (msg) => {
