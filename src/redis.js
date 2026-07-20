@@ -54,6 +54,25 @@ class Redis {
     return this._execute('hmget', key, toGetFields);
   }
 
+  /**
+   * Delete one or more fields from a redis hash
+   * @param {String} key Hash key
+   * @param {...String} fields Field names to delete
+   */
+  async hdel(key, ...fields) {
+    if (_.size(fields) == 0) {
+      return 0;
+    }
+    // Support passing a single array of fields: hdel(key, [f1, f2])
+    if (_.size(fields) == 1 && _.isArray(fields[0])) {
+      fields = fields[0];
+    }
+    if (_.size(fields) == 0) {
+      return 0;
+    }
+    return this._execute('hdel', key, ...fields);
+  }
+
   async get(key) {
     return this._execute('get', key);
   }
